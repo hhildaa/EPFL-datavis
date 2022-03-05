@@ -1,4 +1,3 @@
-
 /*
 ## Functions and iteration
 To implement:
@@ -8,7 +7,14 @@ To implement:
 * filter [1, 2, 3, 4, 5] by isEven
 
 */
+function isEven (value){
+	if (value % 2) {return true}
+	else {return false}
+}
 
+console.log([1, 2, 3, 4, 5].map(isEven))
+
+console.log([1, 2, 3, 4, 5].filter(isEven))
 
 /*
 ### multiply
@@ -17,6 +23,10 @@ To implement:
 * find a product of the following numbers: 1,2,3,4,5
 * multiply(1,2,3,4,5) should return 120
 */
+
+function multiply (list){
+	return list.reduce((sum, value) => {return sum * value}, 1);
+}
 
 
 /*
@@ -27,6 +37,14 @@ To implement:
 * divisibleBy
 * filter [0, 1, 2, 3, 4, 5, 6] by divisibleBy(3)
 */
+
+function divisibleBy(filter) {
+	return function() {
+		return list => list.map(x => x % filter === 0);
+	}
+}
+const div = divisibleBy(3);
+console.log(div(3)([1,2,3,4,5]))
 
 
 /*
@@ -45,7 +63,16 @@ colorCycle(colors=COLOR_CYCLE_DEFAULT)
 
 const COLOR_CYCLE_DEFAULT = ['red', 'green', 'magenta', 'blue'];
 
-
+function colorCycle(colors) {
+	const c = colors || COLOR_CYCLE_DEFAULT;
+	let privateCounter = 0;
+	return {
+		function () {
+			privateCounter ++;
+			return c[privateCounter%c.length()];
+		}	
+	};
+};
 
 const cc_r_g = colorCycle(['red', 'green']);
 // This is a way to run 10 times, see the task about `range` below.
@@ -66,11 +93,22 @@ To implement:
 * filter range(100) by divisibility by 13
 */
 
+function range(n) {
+	tmp = Array(n);
+	for (var i = 0; i < n; i++) {
+		tmp[i] = i;
+	}
+	return tmp;
+}
+
+
 console.log('range(10)', range(10));
+
 // Expeceted result:
 // [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-
+let div13 = divisibleBy(13)
+console.log(div13(13)(range(100)))
 
 /*
 To implement:
@@ -89,6 +127,14 @@ console.log('randomArray', randomArray(5, 0, 10));
 	For example `countOccurrences("hello")` yields `{'h': 1, 'e': 1, 'l': 2, 'o': 1 }`.
 */
 
+function countOccurrences(string){
+    return Array.from(string).reduce(
+        (tmp, char) => {
+        if (typeof tmp[char] === "undefined") tmp[char] = 0;
+        tmp[char]= tmp[char] + 1;
+        return tmp;},
+        {});
+}
 
 console.log(countOccurrences('hello'));
 // Expected result:
@@ -107,12 +153,18 @@ console.log(countOccurrences('hello'));
 of characters in any text you input. You can pass a `colorCycle` with your colors as the second argument to color the bars.
 */
 
+function normalizeCounts(array) {
+	const sum = Object.keys(array).reduce((s, char) =>  s + array[char], 0);
+	Object.keys(array).forEach(char => array[char] = array[char] / sum);
+    return array;
+}
+
 
 console.log(normalizeCounts(countOccurrences('hello')));
 // Expected result:
 // normalizeCounts({'h': 1, 'e': 1, 'l': 2, 'o': 1 }) ---> {'h': 0.2, 'e': 0.2, 'l': 0.4, 'o': 0.2 }
 
-
+setCharacterCountingFunction(countOccurencesNormalized, colorCycle(['purple', 'rgb(20, 230, 220)', 'rgb(10, 230, 20)']));
 /*
 ## Throwing balls
 
